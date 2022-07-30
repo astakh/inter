@@ -130,6 +130,10 @@ async function addDeal(p) {
     const d = new Deal(p)
     await d.save()
 }
+async function getDeals(exchname) {
+    const d = await Deal.find({exch: exchname})
+    return d
+}
 async function changeCoin(c, p) {
     await Coin.updateOne(c, {market: p})
 }
@@ -139,6 +143,7 @@ module.exports.addDeal      = addDeal
 module.exports.setStage     = setStage;
 module.exports.addMask      = addMask
 module.exports.addDeal      = addDeal
+module.exports.getDeals      = getDeals
 module.exports.addOrder     = addOrder
 module.exports.addCoin      = addCoin
 module.exports.changeCoin   = changeCoin

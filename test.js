@@ -8,7 +8,7 @@ require('dotenv').config()
 
 let exch = []
 exch.push(new ccxt.binance( { apiKey: process.env.BINANCE_API_KEY,                  secret: process.env.BINANCE_API_SECRET }))
-exch.push(new ccxt.gateio(  { apiKey: '99473726-03B8-43AB-A3FF-D7D97D657192',       secret: 'be1c1d3b56fe8b0b558e123b2bce5abdb3174d10797ceab52d6b5f094bdd5d49' }))
+exch.push(new ccxt.gateio(  { apiKey: process.env.GATEIO_API_KEY,                   secret: process.env.GATEIO_API_SECRET }))
 exch.push(new ccxt.kucoin(  { apiKey: '62c484053e5f050001576a62',                   secret: '64d8d248-85b6-46a7-b5da-ed9929cb2212' }))
 exch.push(new ccxt.huobi(   { apiKey: 'ad6416cf-d0d7f9eb-vf25treb80-5c110',         secret: 'e950123e-abd87ef3-83dfb0cb-07d0f'  }))
 exch.push(new ccxt.bibox(   { apiKey: '2ce9e88e6325cca8bc80d0229b26fd41643b1425',   secret: '462c1a837de2f69ee9adb5ce6032415ab08a8b47'  }))
@@ -74,11 +74,10 @@ async function market (exch) {
     }
     console.log('end')
 }
-async function marketLoop() {
-    while(true) {
-        for (var i=0; i<exch.length; i++) {
-            await market(exch[i])
-        }
+async function show() {
+    const deals = await db.getDeals('KuCoin')
+    for (var i=0; i<deals.length; i++) {
+        console.log(`${i}) ${deals[i].createdAt} ${deals[i].coin} ${deals[i].base} ${deals[i].profit.toFixed(2)}`)
     }
 }
-marketLoop()
+show()
