@@ -37,6 +37,10 @@ async function addCoins() {
         console.log(pair[0])
     }
 }
+async function checkDeal(exch, coin, base, volume, type) {
+    const book1 = await fetchOrderBook(coin + "/USDT", 5)
+    console.log(book1)
+}
 async function market (exch) {
     console.log(exch.name + ':')
     const starttime     = new Date()
@@ -63,6 +67,7 @@ async function market (exch) {
             if (profit > 0.3 && profit < 10) {
                 await db.addDeal({exch: exch.name, profit: profit, type: 1, coin: coin, base: base})
                 console.log(`${coin}1: ${base} ${profit.toFixed(2)} : 100USDT => ${amountC.toFixed(4)}${coin} => ${amountB.toFixed(4)}${base} => ${(amountB * m[base + '/USDT'].bid).toFixed(2)}USDT`)
+                await checkDeal(exch, coin, base, 50, 1)
             } 
 
             amountB     = 100 / m[base + '/USDT'].ask
@@ -72,6 +77,7 @@ async function market (exch) {
             if (profit > 0.3 && profit < 10) {
                 await db.addDeal({exch: exch.name, profit: profit, type: 2, coin: coin, base: base})
                 console.log(`${coin}2: ${base} ${profit.toFixed(2)} : 100USDT => ${amountB.toFixed(4)}${base} => ${amountC.toFixed(4)}${coin} => ${(amountC * m[coin + '/USDT'].bid).toFixed(2)}USDT`)
+                await checkDeal(exch, coin, base, 50, 2)
             }
 
         }

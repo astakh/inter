@@ -4,8 +4,8 @@ const mongoose      = require('mongoose');
 const func          = require('../functions');
 const {Coin}        = require('../models/Coins')
 const {Deal}        = require('../models/Deals')
-//const {Deal}        = require('../models/Deals');
-//const { Log }       = require('./Logs');
+const {Trade}       = require('../models/Trades')
+
 require('dotenv').config()
 
 const db            = process.env.DBPATH; 
