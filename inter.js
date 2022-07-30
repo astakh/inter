@@ -61,7 +61,7 @@ async function market (exch) {
     const pairs         = Object.keys(m) 
     const pairsCount    = pairs.length
     let   coinsCount    = 0
-    let   volume        = 50 
+    let   volume        = 20 
     for (var i=0; i<pairsCount; i++) { 
         const pair  = pairs[i].split('/')
         const coin = pair[0]
