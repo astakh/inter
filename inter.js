@@ -83,7 +83,7 @@ async function market (exch) {
                 const avg1 = await avgTrade(exch, coin + "/USDT", 50, "asks")
                 const avg2 = await avgTrade(exch, coin + "/" + base, 50, "bids")
                 const avg3 = await avgTrade(exch, base + '/USDT', 50, "bids")
-                console.log(avg1, avg2, avg3)
+                console.log(avg1, avg2, avg3, (100/avg1*avg2*avg3).toFixed(2))
             } 
 
             amountB     = 100 / m[base + '/USDT'].ask
@@ -96,7 +96,7 @@ async function market (exch) {
                 const avg1 = await avgTrade(exch, base + "/USDT", 50, "asks")
                 const avg2 = await avgTrade(exch, coin + "/" + base, 50, "asks")
                 const avg3 = await avgTrade(exch, coin + '/USDT', 50, "bids")
-                console.log(avg1, avg2, avg3)
+                console.log(avg1, avg2, avg3, (100/avg1/avg2*avg3).toFixed(2))
             }
 
         }
