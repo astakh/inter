@@ -12,7 +12,7 @@ let exch = []
 exch.push(new ccxt.gateio(  { apiKey: process.env.GATEIO_API_KEY,                   secret: process.env.GATEIO_API_SECRET }))
 exch.push(new ccxt.kucoin(  { apiKey: process.env.KUCOIN_API_KEY,                   secret: process.env.KUCOIN_API_SECRET }))
 exch.push(new ccxt.huobi(   { apiKey: process.env.HUOBI_API_KEY,                    secret: process.env.HUOBI_API_SECRET }))
-exch.push(new ccxt.bibox(   { apiKey: process.env.BIBOX_API_KEY,                    secret: process.env.BIBOX_API_SECRET }))
+//exch.push(new ccxt.bibox(   { apiKey: process.env.BIBOX_API_KEY,                    secret: process.env.BIBOX_API_SECRET }))
 exch.push(new ccxt.okx(     { apiKey: process.env.OKX_API_KEY,                      secret: process.env.OKX_API_SECRET,         password: process.env.OKX_PASS }))
 //console.log(exch)
 async function addCoins() {
