@@ -68,7 +68,7 @@ async function market (exch) {
 
                     if (profit > 0.3) {
                         await db.addDeal({exch: exch.name, profit: profit, type: 2, coin: coin, base: base})
-                        console.log(`${coin}2: ${base} ${profit.toFixed(2)} : 100USDT => ${amountB.toFixed(4)}${base} => ${amountC.toFixed(4)}${coin} => ${(amountC * m[base + '/USDT'].bid).toFixed(2)}USDT`)
+                        console.log(`${coin}2: ${base} ${profit.toFixed(2)} : ${m[base + '/USDT'].ask}>${amountB}||${m[coin + '/' + base].ask}>${amountC}||${m[coin + '/USDT'].bid}`)
                     }
 
                 }
