@@ -83,7 +83,7 @@ async function market (exch) {
                 const avg3 = await avgTrade(exch, base + '/USDT', volume, "bids")
                 profit     = (100/avg1*avg2*avg3) - 0.3 - 100
                 console.log(avg1, avg2, avg3, profit.toFixed(2))
-                console.log(`${coin}1: ${base} ${profit.toFixed(2)} : 100USDT => ${amountC.toFixed(4)}${coin} => ${amountB.toFixed(4)}${base} => ${(amountB * m[base + '/USDT'].bid).toFixed(2)}USDT`)
+                console.log(`${coin}1: ${base} ${profit.toFixed(2)} : 100USDT => (${m[coin + '/USDT'].ask}) ${amountC.toFixed(4)}${coin} => (${m[coin + '/' + base].bid}) ${amountB.toFixed(4)}${base} => (${m[base + '/USDT'].bid}) ${(amountB * m[base + '/USDT'].bid).toFixed(2)}USDT`)
                 if (profit > 0.3) {
                     await db.addDeal({exch: exch.name, profit: profit, type: 1, coin: coin, base: base})
                 }
@@ -99,7 +99,7 @@ async function market (exch) {
                 const avg3 = await avgTrade(exch, coin + '/USDT', volume, "bids")
                 profit     = (100/avg1/avg2*avg3) - 0.3 - 100
                 console.log(avg1, avg2, avg3, profit.toFixed(2))
-                console.log(`${coin}2: ${base} ${profit.toFixed(2)} : 100USDT => ${amountB.toFixed(4)}${base} => ${amountC.toFixed(4)}${coin} => ${(amountC * m[coin + '/USDT'].bid).toFixed(2)}USDT`)
+                console.log(`${coin}2: ${base} ${profit.toFixed(2)} : 100USDT => (${m[base + '/USDT'].ask}) ${amountB.toFixed(4)}${base} => (${m[coin + '/' + base].ask}) ${amountC.toFixed(4)}${coin} => (${m[coin + '/USDT'].bid}) ${(amountC * m[coin + '/USDT'].bid).toFixed(2)}USDT`)
                 if (profit > 0.3) {
                     await db.addDeal({exch: exch.name, profit: profit, type: 2, coin: coin, base: base})
                 }
