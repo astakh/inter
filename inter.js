@@ -38,7 +38,7 @@ async function addCoins() {
     }
 }
 async function market (exch) {
-    console.log(exch.name)
+    //console.log(exch.name)
     const starttime = new Date()
     const m = await exch.fetchTickers()
     const pairs = Object.keys(m) 
@@ -74,7 +74,7 @@ async function market (exch) {
         }
 
     }
-    console.log(`ended in ${(new Date() - starttime)/1000} sec`)
+    console.log(`${exch.name} ended in ${(new Date() - starttime)/1000} sec`)
 }
 async function marketLoop() {
     while(true) {
