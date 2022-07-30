@@ -38,43 +38,46 @@ async function addCoins() {
     }
 }
 async function market (exch) {
-    //console.log(exch.name)
+    console.log(exch.name + ':')
     const starttime     = new Date()
     const m             = await exch.fetchTickers()
     const pairs         = Object.keys(m) 
     const pairsCount    = pairs.length
     let   coinsCount    = 0
+    let   volume        = 50 
     for (var i=0; i<pairsCount; i++) { 
         const pair  = pairs[i].split('/')
         const coin = pair[0]
         const base = pair[1]
-        if (base == 'BNB' || base == 'BTC' || base == 'ETH' || base == 'USDT' || base == 'USDC' || base == 'BUSD') {
-            const c = await Coin.findOne({name: coin})
-            if (c && m[coin + '/' + base] && m[base + '/USDT'] && m[coin + '/USDT'] && coin != 'EPS') {
-                if (c && m[coin + '/' + base].ask>0 && m[base + '/USDT'].ask>0 && m[coin + '/USDT'].ask>0) { 
-                    coinsCount++
-                    let amountC     = 100 / m[coin + '/USDT'].ask
-                    let amountB     = amountC * m[coin + '/' + base].bid
-                    let profit      = amountB * m[base + '/USDT'].bid - (3 * 0.1) - 100
+        let baseOk = false
+        let coinOk = false
+        if (base == 'BNB' || base == 'BTC' || base == 'ETH' || base == 'USDT' || base == 'USDC' || base == 'BUSD') { baseOk = true }
+        const c = await Coin.findOne({name: coin})
+        if (baseOk && c && m[coin + '/' + base] && m[base + '/USDT'] && m[coin + '/USDT'] && coin != 'EPS') { coinOk = true }
+        if (coinOk && m[coin + '/' + base].ask>0 && m[base + '/USDT'].ask>0 && m[coin + '/USDT'].ask>0) { 
+            coinsCount++
+            let amountC     = 100 / m[coin + '/USDT'].ask
+            let amountB     = amountC * m[coin + '/' + base].bid
+            let profit      = amountB * m[base + '/USDT'].bid - (3 * 0.1) - 100
 
-                    if (profit > 0.3) {
-                        await db.addDeal({exch: exch.name, profit: profit, type: 1, coin: coin, base: base})
-                        console.log(`${coin}1: ${base} ${profit.toFixed(2)} : 100USDT => ${amountC.toFixed(4)}${coin} => ${amountB.toFixed(4)}${base} => ${(amountB * m[base + '/USDT'].bid).toFixed(2)}USDT`)
-                    } 
+            if (profit > 0.3 && profit < 10) {
+                await db.addDeal({exch: exch.name, profit: profit, type: 1, coin: coin, base: base})
+                console.log(`${coin}1: ${base} ${profit.toFixed(2)} : 100USDT(${m[coin + '/USDT'].askVolume.toFixed(2)}) => ${amountC.toFixed(4)}${coin} => ${amountB.toFixed(4)}${base} => ${(amountB * m[base + '/USDT'].bid).toFixed(2)}USDT`)
+            } 
 
-                    amountB     = 100 / m[base + '/USDT'].ask
-                    amountC     = amountB / m[coin + '/' + base].ask
-                    profit      = amountC * m[coin + '/USDT'].bid - (3 * 0.1) - 100
+            amountB     = 100 / m[base + '/USDT'].ask
+            amountC     = amountB / m[coin + '/' + base].ask
+            profit      = amountC * m[coin + '/USDT'].bid - (3 * 0.1) - 100
 
-                    if (profit > 0.3) {
-                        await db.addDeal({exch: exch.name, profit: profit, type: 2, coin: coin, base: base})
-                        console.log(`${coin}2: ${base} ${profit.toFixed(2)} : 100USDT => ${amountB.toFixed(4)}${base} => ${amountC.toFixed(4)}${coin} => ${(amountC * m[coin + '/USDT'].bid).toFixed(2)}USDT`)
-                    }
-
-                }
+            if (profit > 0.3 && profit < 10) {
+                await db.addDeal({exch: exch.name, profit: profit, type: 2, coin: coin, base: base})
+                console.log(`${coin}2: ${base} ${profit.toFixed(2)} : 100USDT(${m[base + '/USDT'].askVolume.toFixed(2)}) => ${amountB.toFixed(4)}${base} => ${amountC.toFixed(4)}${coin} => ${(amountC * m[coin + '/USDT'].bid).toFixed(2)}USDT`)
             }
 
         }
+        
+
+        
 
     }
     console.log(`${exch.name} ended in ${(new Date() - starttime)/1000} sec || pairsCount=${pairsCount} coinsCount=${coinsCount}`)
