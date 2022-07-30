@@ -81,7 +81,7 @@ async function market (exch) {
                 const avg1 = await avgTrade(exch, coin + "/USDT", 50, "asks")
                 const avg2 = await avgTrade(exch, coin + "/" + base, 50, "bids")
                 const avg3 = await avgTrade(exch, base + '/USDT', 50, "bids")
-                profit     = (100/avg1*avg2*avg3) - 0.3
+                profit     = (100/avg1*avg2*avg3) - 0.3 - 100
                 console.log(avg1, avg2, avg3, profit.toFixed(2))
                 if (profit > 0.3) {
                     await db.addDeal({exch: exch.name, profit: profit, type: 1, coin: coin, base: base})
@@ -98,7 +98,7 @@ async function market (exch) {
                 const avg1 = await avgTrade(exch, base + "/USDT", 50, "asks")
                 const avg2 = await avgTrade(exch, coin + "/" + base, 50, "asks")
                 const avg3 = await avgTrade(exch, coin + '/USDT', 50, "bids")
-                profit     = (100/avg1/avg2*avg3) - 0.3
+                profit     = (100/avg1/avg2*avg3) - 0.3 - 100
                 console.log(avg1, avg2, avg3, profit.toFixed(2))
                 if (profit > 0.3) {
                     await db.addDeal({exch: exch.name, profit: profit, type: 2, coin: coin, base: base})
