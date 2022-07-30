@@ -78,9 +78,9 @@ async function market (exch) {
             let profit      = amountB * m[base + '/USDT'].bid - (3 * 0.1) - 100
 
             if (profit > 0.3 && profit < 10) {
-                const avg1 = await avgTrade(exch, coin + "/USDT", 50, "asks")
-                const avg2 = await avgTrade(exch, coin + "/" + base, 50 / m[coin + '/' + base].bid, "bids")
-                const avg3 = await avgTrade(exch, base + '/USDT', 50, "bids")
+                const avg1 = await avgTrade(exch, coin + "/USDT", volume, "asks")
+                const avg2 = await avgTrade(exch, coin + "/" + base, volume / m[base + '/USDT'].bid, "bids")
+                const avg3 = await avgTrade(exch, base + '/USDT', volume, "bids")
                 profit     = (100/avg1*avg2*avg3) - 0.3 - 100
                 console.log(avg1, avg2, avg3, profit.toFixed(2))
                 console.log(`${coin}1: ${base} ${profit.toFixed(2)} : 100USDT => ${amountC.toFixed(4)}${coin} => ${amountB.toFixed(4)}${base} => ${(amountB * m[base + '/USDT'].bid).toFixed(2)}USDT`)
@@ -94,9 +94,9 @@ async function market (exch) {
             profit      = amountC * m[coin + '/USDT'].bid - (3 * 0.1) - 100
 
             if (profit > 0.3 && profit < 10) {
-                const avg1 = await avgTrade(exch, base + "/USDT", 50, "asks")
-                const avg2 = await avgTrade(exch, coin + "/" + base, 50 / m[coin + '/' + base].ask, "asks")
-                const avg3 = await avgTrade(exch, coin + '/USDT', 50, "bids")
+                const avg1 = await avgTrade(exch, base + "/USDT", volume, "asks")
+                const avg2 = await avgTrade(exch, coin + "/" + base, volume / m[base + '/USDT'].ask, "asks")
+                const avg3 = await avgTrade(exch, coin + '/USDT', volume, "bids")
                 profit     = (100/avg1/avg2*avg3) - 0.3 - 100
                 console.log(avg1, avg2, avg3, profit.toFixed(2))
                 console.log(`${coin}2: ${base} ${profit.toFixed(2)} : 100USDT => ${amountB.toFixed(4)}${base} => ${amountC.toFixed(4)}${coin} => ${(amountC * m[coin + '/USDT'].bid).toFixed(2)}USDT`)
