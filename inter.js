@@ -39,10 +39,12 @@ async function addCoins() {
 }
 async function market (exch) {
     //console.log(exch.name)
-    const starttime = new Date()
-    const m = await exch.fetchTickers()
-    const pairs = Object.keys(m) 
-    for (var i=0; i<pairs.length; i++) { 
+    const starttime     = new Date()
+    const m             = await exch.fetchTickers()
+    const pairs         = Object.keys(m) 
+    const pairsCount    = pairs.length
+    let   coinsCount    = 0
+    for (var i=0; i<pairsCount; i++) { 
         const pair  = pairs[i].split('/')
         const coin = pair[0]
         const base = pair[1]
@@ -50,13 +52,14 @@ async function market (exch) {
             const c = await Coin.findOne({name: coin})
             if (c && m[coin + '/' + base] && m[base + '/USDT'] && m[coin + '/USDT'] && coin != 'EPS') {
                 if (c && m[coin + '/' + base].ask>0 && m[base + '/USDT'].ask>0 && m[coin + '/USDT'].ask>0) { 
+                    coinsCount++
                     let amountC     = 100 / m[coin + '/USDT'].ask
                     let amountB     = amountC * m[coin + '/' + base].bid
                     let profit      = amountB * m[base + '/USDT'].bid - (3 * 0.1) - 100
 
                     if (profit > 0.3) {
                         await db.addDeal({exch: exch.name, profit: profit, type: 1, coin: coin, base: base})
-                        console.log(`${coin}1: ${base} ${profit.toFixed(2)} : ${m[coin + '/USDT'].ask}>${amountC}||${m[coin + '/' + base].bid}>${amountB}||${m[base + '/USDT'].bid}`)
+                        console.log(`${coin}1: ${base} ${profit.toFixed(2)} : 100USDT => ${amountC.toFixed(4)}${coin} => ${amountB.toFixed(4)}${base} => ${(amountB * m[base + '/USDT'].bid).toFixed(2)}USDT`)
                     } 
 
                     amountB     = 100 / m[base + '/USDT'].ask
@@ -74,7 +77,7 @@ async function market (exch) {
         }
 
     }
-    console.log(`${exch.name} ended in ${(new Date() - starttime)/1000} sec`)
+    console.log(`${exch.name} ended in ${(new Date() - starttime)/1000} sec || pairsCount=${pairsCount} coinsCount=${coinsCount}`)
 }
 async function marketLoop() {
     while(true) {
