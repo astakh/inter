@@ -37,11 +37,22 @@ async function addCoins() {
         console.log(pair[0])
     }
 }
-async function checkDeal(exch, coin, base, volume, type) {
-    const book1 = await exch.fetchOrderBook(coin + "/USDT", 20)
-
-
-    console.log(book1)
+async function avgTrade(exch, pair, volume, direct) {
+    const book1 = await exch.fetchOrderBook(pair, 20)
+    let vol = 0
+    let avg = 0
+    for (var i = 0; i<book1[direct].length; i++) {
+        if (vol == 0) {
+            vol = book1[direct][i][0] * book1[direct][i][1]
+            avg = book1[direct][i][0]
+        }
+        else {
+            avg = (avg * vol + book1[direct][i][0] * book1[direct][i][1]) / (vol + book1[direct][i][1])
+            vol += book1[direct][i][0] * book1[direct][i][1]
+        }
+        if (vol > volume) { break }
+    }
+    return avg
 }
 async function market (exch) {
     console.log(exch.name + ':')
@@ -69,7 +80,8 @@ async function market (exch) {
             if (profit > 0.3 && profit < 10) {
                 await db.addDeal({exch: exch.name, profit: profit, type: 1, coin: coin, base: base})
                 console.log(`${coin}1: ${base} ${profit.toFixed(2)} : 100USDT => ${amountC.toFixed(4)}${coin} => ${amountB.toFixed(4)}${base} => ${(amountB * m[base + '/USDT'].bid).toFixed(2)}USDT`)
-                await checkDeal(exch, coin, base, 50, 1)
+                const avg1 = await avgTrade(exch, coin + "/USDT", 50, "asks")
+                console.log(avg1)
             } 
 
             amountB     = 100 / m[base + '/USDT'].ask
