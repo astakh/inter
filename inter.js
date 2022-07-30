@@ -38,7 +38,7 @@ async function addCoins() {
     }
 }
 async function checkDeal(exch, coin, base, volume, type) {
-    const book1 = await fetchOrderBook(coin + "/USDT", 5)
+    const book1 = await exch.fetchOrderBook(coin + "/USDT", 5)
     console.log(book1)
 }
 async function market (exch) {
